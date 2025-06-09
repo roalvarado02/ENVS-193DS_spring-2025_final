@@ -74,5 +74,33 @@ str(sst_clean)
 
 ## b. 
 
+```{r}
+
+# Filter for correct years
+sst_filtered <- sst_clean |> filter(year %in% 2018:2023)
+
+ggplot(sst_filtered, aes(x = month, y = mean_monthly_sst, group = year)) +
+  geom_line(aes(color = factor(year)), size = 0.5) +  # Thinner lines
+  geom_point(aes(color = factor(year)), size = 2) +
+  scale_color_manual(
+    values = colorRampPalette(c("skyblue", "darkblue"))(6),
+    name = "Year"
+  ) +
+  labs(
+    x = "Month",
+    y = "Mean monthly sea surface temperature (°C)"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    panel.grid = element_blank(),                     # Remove grid lines
+    legend.position = c(0.05, 0.95),                  # Top left corner
+    legend.justification = c("left", "top"),          # Align top-left
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 10)
+  )
+
+
+```
 
 
