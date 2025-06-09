@@ -3,3 +3,39 @@ title: "final"
 format: html
 ---
 
+GitHub repo: https://github.com/roalvarado02/ENVS-193DS_spring-2025_final.git 
+
+```{r}
+
+library(readxl) #allows reading excel files
+library(tidyverse) #load package for data manipulation and vizualization 
+library(janitor) #load package for cleaning column names
+library(dplyr) #package for data manipulation
+library(gt) #package for themes
+library(effectsize) #package to compute effect sizes
+library(ggplot2) #package to create data visualization 
+
+```
+
+
+# Problem 1: Research Writing
+
+## a. Transparent statistical methods
+
+In part 1, they used a Pearson correlation test to compare two continuous variables. A value of 0.03 is lower than the 0.05 significance threshold meaning there is a significant linear relationship between the variables, so they rejected the null hypothesis. 
+
+In part 2, they used a one-way ANOVA test to compare a continuous variable to five categorical groups. The test was able to check if at least one group mean was significantly different from the others, and the p=0.02 indicated there was a difference so the null hypothesis was rejected.
+
+## b. More information needed
+
+Part 2 could include effect size such as Cohen's f to show how large the difference is. They could also use a Post-hoc pairwise comparison to determine which categorical groups are significantly different from each other.
+
+## c. Suggestions for rewriting
+
+
+
+# Problem 2: Data Visualization 
+
+
+
+
