@@ -1,9 +1,17 @@
 ---
-title: "final"
-format: html
+title: "Final"
+author: "Rachel Alvarado"
+date: "06/11/25"
+subtitle: "https://github.com/roalvarado02/ENVS-193DS_spring-2025_final.git" 
+format:
+  html:
+    toc: true # use this to display a table of contents
+execute:
+  message: false # use this to make sure messages don't show up
+  warning: false # use this to make sure messages don't show up
 ---
 
-GitHub repo: https://github.com/roalvarado02/ENVS-193DS_spring-2025_final.git 
+
 
 ```{r}
 
@@ -14,6 +22,9 @@ library(dplyr) #package for data manipulation
 library(gt) #package for themes
 library(effectsize) #package to compute effect sizes
 library(ggplot2) #package to create data visualization 
+library(lubridate) #package to manipulate dates
+
+sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/seasurfacetemp.csv") #read in data 
 
 ```
 
@@ -32,10 +43,36 @@ Part 2 could include effect size such as Cohen's f to show how large the differe
 
 ## c. Suggestions for rewriting
 
+Part 1: We found a significant positive relationship between distance from headwaters and annual total nitrogen load, suggesting that nitrogen accumulates downstream (Pearson correlation test, r = correlation coefficient, p = 0.03, α = 0.05). 
 
+Part 2: Average nitrogen load differed significantly across source types, with higher loads from fertilizer and wastewater treatment sources compared to grasslands and urban land.
+(One-way ANOVA, F = test statistic, df = degrees of freedom, p = 0.02, α = 0.05; post-hoc pairwise differences; effect size). 
 
 # Problem 2: Data Visualization 
 
+## a.
+
+```{r}
+
+sst_clean <- sst |>
+  clean_names() |>
+  mutate(
+    date = ymd(date),                   
+    year = year(date),
+    month = month(date, label = TRUE, abbr = TRUE)) |>
+  group_by(year, month) |>
+  summarise(mean_monthly_sst = mean(temp, na.rm = TRUE), .groups = "drop")
+
+slice_sample(sst_clean, n = 5)
+
+str(sst_clean)
+
+
+```
+
+
+
+## b. 
 
 
 
