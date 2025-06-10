@@ -11,8 +11,6 @@ execute:
   warning: false # use this to make sure messages don't show up
 ---
 
-
-
 ```{r}
 
 library(readxl) #allows reading excel files
@@ -31,6 +29,8 @@ sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/
 nest_boxes <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/occdist.csv")
 
 ```
+
+
 
 
 # Problem 1: Research Writing
@@ -56,6 +56,8 @@ Part 2: Average nitrogen load differed significantly across source types, with h
 
 ## a. Cleaning and summarizing
 
+
+
 ```{r}
 
 sst_clean <- sst |>
@@ -76,7 +78,11 @@ str(sst_clean)
 
 
 
+
+
 ## b. Visualize the data
+
+
 
 ```{r}
 
@@ -106,6 +112,8 @@ ggplot(sst_filtered, aes(x = month, y = mean_monthly_sst, group = year)) +
 
 
 ```
+
+
 
 # Problem 3: Data analysis
 
@@ -137,6 +145,8 @@ The two seasons are the summer breeding seasons of 2016 and 2019. 2016 is when t
 
 ## e. Run the models 
 
+
+
 ```{r}
 
 # model 1: null model
@@ -166,7 +176,11 @@ model4 <- glm(
 
 ```
 
+
+
 ## f. Check the diagnostics
+
+
 
 ```{r}
 
@@ -189,7 +203,11 @@ plot(mod4)
 ```
 
 
+
+
 ## g.
+
+
 
 ```{r}
 
@@ -202,15 +220,21 @@ AICc(
 
 ```
 
+
+
 The best model as determined by Akaike’s Information Criterion (AIC) is model2. 
 
 ## h.
+
+
 
 ```{r}
 
 plot(model2)
 
 ```
+
+
 
 Create a plot showing model predictions with 95% confidence intervals and the underlying data.
 
@@ -233,5 +257,6 @@ use colors that are different from the default
 
 
 ## k.
+
 
 
