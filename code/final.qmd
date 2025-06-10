@@ -23,6 +23,8 @@ library(gt) #package for themes
 library(effectsize) #package to compute effect sizes
 library(ggplot2) #package to create data visualization 
 library(lubridate) #package to manipulate dates
+library(DHARMa) #packing to run residual diagnostics 
+library(MuMIn) #package for model selection
 
 sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/seasurfacetemp.csv") #read in data 
 
@@ -119,13 +121,83 @@ The main difference between Swift Parrots and the other species is that these pa
 
 ## c. Difference in “seasons” 
 
-## d.
+The two seasons are the summer breeding seasons of 2016 and 2019. 2016 is when the nests were newly deployed and 2019 is when the nests had been in place for three years. 
 
-## e.
+## d. Table of models
 
-## f.
+4 models total:
+
+| Model number | Season | Distance to forest edge | Model description                 |
+|:------------:|:------:|:-----------------------:|:---------------------------------:|
+|      1       |        |                         |   Null Model - no predictors      |
+|      2       |   X    |           X             |   Saturated Model                 |
+|      3       |   X    |                         |   Season Model                    |
+|      4       |        |           X             |   Distance Model                  |
+
+
+## e. Run the models 
+
+```{r}
+
+# model 1: null model
+model1 <- glm(
+  sp ~ 1,  
+  data = nest_boxes)
+
+# model 2: saturated model (season + distance + interaction)
+model2 <- glm(
+  sp ~ season + edge.distance,
+  data = nest_boxes)
+
+# model 3: season only model
+model3 <- glm(
+  sp ~ season,
+  data = nest_boxes)
+
+# model 4: distance only model
+model4 <- glm(
+  sp ~ edge.distance,
+  data = nest_boxes)
+
+
+```
+
+## f. Check the diagnostics
+
+```{r}
+
+# Model 1: Null model
+mod1 <- simulateResiduals(model1)
+plot(mod1)
+
+# Model 2: Saturated model (season + edge.distance)
+mod2 <- simulateResiduals(model2)
+plot(mod2)
+
+# Model 3: Season-only model
+mod3 <- simulateResiduals(model3)
+plot(mod3)
+
+# Model 4: Distance-only model
+mod4 <- simulateResiduals(model4)
+plot(mod4)
+
+```
+
 
 ## g.
+
+```{r model-selection}
+AICc(mod1,
+     mod2,
+     mod3,
+     mod4) |> 
+  # arranging output in descending order of AIC
+  arrange(AICc)
+```
+
+```
+
 
 ## h.
 
