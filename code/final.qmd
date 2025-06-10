@@ -26,6 +26,8 @@ library(lubridate) #package to manipulate dates
 
 sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/seasurfacetemp.csv") #read in data 
 
+nest_boxes <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/occdist.csv")
+
 ```
 
 
@@ -50,7 +52,7 @@ Part 2: Average nitrogen load differed significantly across source types, with h
 
 # Problem 2: Data Visualization 
 
-## a.
+## a. Cleaning and summarizing
 
 ```{r}
 
@@ -72,7 +74,7 @@ str(sst_clean)
 
 
 
-## b. 
+## b. Visualize the data
 
 ```{r}
 
@@ -83,7 +85,7 @@ ggplot(sst_filtered, aes(x = month, y = mean_monthly_sst, group = year)) +
   geom_line(aes(color = factor(year)), size = 0.5) +  # Thinner lines
   geom_point(aes(color = factor(year)), size = 2) +
   scale_color_manual(
-    values = colorRampPalette(c("skyblue", "darkblue"))(6),
+    values = colorRampPalette(c("pink", "deeppink3"))(6),
     name = "Year"
   ) +
   labs(
@@ -102,5 +104,35 @@ ggplot(sst_filtered, aes(x = month, y = mean_monthly_sst, group = year)) +
 
 
 ```
+
+# Problem 3: Data analysis
+
+## a. Response variable
+
+We have rows of sp (Swift Parrots), tm (Tree Martin), cm (Common Starling), and e (empty). 
+
+A 0 means that the box was unoccupied by that species, while the 1 means the species did occupy the box or was empty. 
+
+## b. Purpose of study
+
+The main difference between Swift Parrots and the other species is that these parrots are nomadic and highly selective in choosing nests during their breeding season. The Tree Martins and Common Starlings are less selective and use the nests year-round.
+
+## c. Difference in “seasons” 
+
+## d.
+
+## e.
+
+## f.
+
+## g.
+
+## h.
+
+## i.
+
+## j.
+
+## k.
 
 
