@@ -140,22 +140,22 @@ The two seasons are the summer breeding seasons of 2016 and 2019. 2016 is when t
 ```{r}
 
 # model 1: null model
-model1 <- glm(
+model1 <- lm(
   sp ~ 1,  
   data = nest_boxes)
 
 # model 2: saturated model (season + distance + interaction)
-model2 <- glm(
+model2 <- lm(
   sp ~ season + edge.distance,
   data = nest_boxes)
 
 # model 3: season only model
-model3 <- glm(
+model3 <- lm(
   sp ~ season,
   data = nest_boxes)
 
 # model 4: distance only model
-model4 <- glm(
+model4 <- lm(
   sp ~ edge.distance,
   data = nest_boxes)
 
@@ -186,17 +186,6 @@ plot(mod4)
 
 
 ## g.
-
-```{r model-selection}
-AICc(mod1,
-     mod2,
-     mod3,
-     mod4) |> 
-  # arranging output in descending order of AIC
-  arrange(AICc)
-```
-
-```
 
 
 ## h.
