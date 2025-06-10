@@ -25,6 +25,7 @@ library(ggplot2) #package to create data visualization
 library(lubridate) #package to manipulate dates
 library(DHARMa) #packing to run residual diagnostics 
 library(MuMIn) #package for model selection
+library(ggeffects) #package for ggpredict
 
 sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/seasurfacetemp.csv") #read in data 
 
@@ -189,7 +190,7 @@ plot(mod4)
 ```
 
 
-## g.
+## g. Select the best model
 
 ```{r}
 
@@ -204,29 +205,51 @@ AICc(
 
 The best model as determined by Akaike’s Information Criterion (AIC) is model2. 
 
-## h.
-
 ```{r}
 
 plot(model2)
 
 ```
 
-Create a plot showing model predictions with 95% confidence intervals and the underlying data.
 
-Show and annotate all code. Show the output.
+## h. Visualize the model predictions
 
-For full credit:
+```{r}
 
-make sure the x- and y-axis labels are written in full
-take out the gridlines
-use colors that are different from the default
+mod2_pred <- ggpredict(model2, terms = c("edge.distance", "season"))
+
+ggplot(mod2_pred, 
+       aes(x = x, 
+           y = predicted, 
+           color = group)) +
+  geom_line(size = 1.2) +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.3, color = NA) +
+  labs(
+    x = "Distance to Forest Edge (m)",
+    y = "Predicted Probability of Species Presence",
+    color = "Season",
+    fill = "Season",
+    title = "Predicted Species Presence by Distance and Season"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),  
+    legend.position = "top"
+  ) +
+  scale_color_manual(values = c("steelblue", "darkgreen")) +
+  scale_fill_manual(values = c("steelblue", "darkgreen"))
 
 
+```
 
-## i.
+## i. Write a caption for your figure
 
+Figure 1 - Predicted Probability of Swift Parrot Nest Box Occupancy by Distance to Forest Edge and Season
 
+This figure displays modeled probabilities of Swift Parrot occupancy in nest boxes at different distances from the forest edge (0 meters to 1000 meters) and two seasons (2016 is blue and 2019 is green). The solid lines represent the predicted probability of occupancy for each season while the shaded bands showcase the 95% confidence intervals.
+
+Data citation:
+Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird [Dataset]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb
 
 ## j.
 
@@ -235,3 +258,9 @@ use colors that are different from the default
 ## k.
 
 
+# Problem 4: Affective and exploratory visualizations
+
+## a.
+
+
+## b. 
