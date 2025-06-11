@@ -27,9 +27,9 @@ library(DHARMa) #packing to run residual diagnostics
 library(MuMIn) #package for model selection
 library(ggeffects) #package for ggpredict
 
-sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/seasurfacetemp.csv") #read in data 
+sst <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/seasurfacetemp.csv") #read in sea surface temperature data 
 
-nest_boxes <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/occdist.csv")
+nest_boxes <- read.csv("/home/jovyan/ES-193DS//Final/ENVS-193DS_spring-2025_final/data/occdist.csv") #read in bird data
 
 ```
 
@@ -59,18 +59,19 @@ Part 2: Average nitrogen load differed significantly across source types, with h
 
 ```{r}
 
-sst_clean <- sst |>
-  clean_names() |>
+sst_clean <- sst |>                         # name clean data frame
+  clean_names() |>                          # Clean column names
   mutate(
-    date = ymd(date),                   
-    year = year(date),
-    month = month(date, label = TRUE, abbr = TRUE)) |>
-  group_by(year, month) |>
-  summarise(mean_monthly_sst = mean(temp, na.rm = TRUE), .groups = "drop")
+    date = ymd(date),                       # Convert the date column to Year-Month-Day
+    year = year(date),                     # new separate year and date columns
+    month = month(date, label = TRUE, abbr = TRUE)) |> # separate month from date
+  group_by(year, month) |>                  # Group the data by year and month
+  
+  summarise(
+    mean_monthly_sst = mean(temp, na.rm = TRUE),  #calculate the mean temperature and ignore NAs
+    .groups = "drop"                      # Drop the grouping structure
+  )
 
-slice_sample(sst_clean, n = 5)
-
-str(sst_clean)
 
 
 ```
@@ -81,29 +82,44 @@ str(sst_clean)
 
 ```{r}
 
-# Filter for correct years
-sst_filtered <- sst_clean |> filter(year %in% 2018:2023)
+#Filter for years 2018 through 2023
+sst_filtered <- sst_clean |> 
+  filter(year %in% 2018:2023)
 
+#Create a line plot of monthly mean sea surface temp
 ggplot(sst_filtered, aes(x = month, y = mean_monthly_sst, group = year)) +
-  geom_line(aes(color = factor(year)), size = 0.5) +  # Thinner lines
+  
+  #Add lines for each year
+  geom_line(aes(color = factor(year)), size = 0.5) +
+  
+  #Add points for each month
   geom_point(aes(color = factor(year)), size = 2) +
+  
+  #Manually set colors using a gradient
   scale_color_manual(
     values = colorRampPalette(c("pink", "deeppink3"))(6),
-    name = "Year"
+    name = "Year"  # Legend title
   ) +
+  
+  #Add axis labels
   labs(
     x = "Month",
     y = "Mean monthly sea surface temperature (°C)"
   ) +
+  
+  #Use a minimal theme
   theme_minimal(base_size = 13) +
+  
+  #Customize appearance
   theme(
-    panel.grid = element_blank(),                     # Remove grid lines
-    legend.position = c(0.05, 0.95),                  # Top left corner
-    legend.justification = c("left", "top"),          # Align top-left
-    panel.border = element_rect(colour = "black", fill = NA, size = 1),
-    legend.title = element_text(size = 11),
-    legend.text = element_text(size = 10)
+    panel.grid = element_blank(),                     #Remove background gridlines
+    legend.position = c(0.05, 0.95),                  #Move legend to top-left corner
+    legend.justification = c("left", "top"),          #Align legend anchor
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),  #Add border
+    legend.title = element_text(size = 11),           #Set legend title font size
+    legend.text = element_text(size = 10)             #Set legend text font size
   )
+
 
 
 ```
@@ -140,27 +156,27 @@ The two seasons are the summer breeding seasons of 2016 and 2019. 2016 is when t
 
 ```{r}
 
-# model 1: null model
+#model 1: null model
 model1 <- glm(
-  sp ~ 1,  
-  data = nest_boxes,
-  family = "binomial")
+  sp ~ 1, # ~1 means the model includes only the intercept 
+  data = nest_boxes, #nest_boxes dataset for each
+  family = "binomial") #binary outcome for each
 
-# model 2: saturated model (season + distance + interaction)
+#model 2: saturated model (season + distance + interaction)
 model2 <- glm(
-  sp ~ season + edge.distance,
+  sp ~ season + edge.distance, #Predictors: season and distance to forest edge
   data = nest_boxes,
   family = "binomial")
 
-# model 3: season only model
+#model 3: season only model
 model3 <- glm(
-  sp ~ season,
+  sp ~ season, #Only the season predictor
   data = nest_boxes,
   family = "binomial")
 
-# model 4: distance only model
+#model 4: distance only model
 model4 <- glm(
-  sp ~ edge.distance,
+  sp ~ edge.distance, # Only the edge.distance predictor
   data = nest_boxes,
   family = "binomial")
 
@@ -172,8 +188,8 @@ model4 <- glm(
 ```{r}
 
 # Model 1: Null model
-mod1 <- simulateResiduals(model1)
-plot(mod1)
+mod1 <- simulateResiduals(model1) #simulate residuals for each model
+plot(mod1) #plot each model
 
 # Model 2: Saturated model (season + edge.distance)
 mod2 <- simulateResiduals(model2)
@@ -194,12 +210,12 @@ plot(mod4)
 
 ```{r}
 
-AICc(
+AICc( #Compare multiple models using AICc
   model1,
   model2,
   model3,
   model4) |> 
-  arrange(AICc)
+  arrange(AICc) #sort from best to worst
 
 ```
 
@@ -207,7 +223,7 @@ The best model as determined by Akaike’s Information Criterion (AIC) is model2
 
 ```{r}
 
-plot(model2)
+plot(model2) #plotting best fit model
 
 ```
 
@@ -216,18 +232,31 @@ plot(model2)
 
 ```{r}
 
+#Generate predicted probabilities from model2 
 mod2_pred <- ggpredict(model2, terms = c("edge.distance", "season"))
 
+#Create the ggplot
 ggplot(mod2_pred, 
        aes(x = x, 
            y = predicted, 
-           color = group)) +
+           color = group)) +  #x = edge.distance, y = predicted probability, color by season
+  
+  #Add predicted lines for each season
   geom_line(size = 1.2) +
+  
+  #Add jittered raw data points 
   geom_jitter(data = nest_boxes,
-              aes(x = edge.distance, y = sp, color = factor(season)),
-              width = 20, height = 0.05, alpha = 0.5,
-              inherit.aes = FALSE) +
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.3, color = NA) +
+              aes(x = edge.distance, y = sp, color = factor(season)),  # Use season for coloring
+              width = 20,        #Horizontal jitter
+              height = 0.05,     #Vertical jitter
+              alpha = 0.5,       #Semi-transparent points
+              inherit.aes = FALSE) +   #Use its own aesthetics
+  
+  # Add confidence ribbons
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group),  #95% CI
+              alpha = 0.3, color = NA) +
+  
+  #Add labels for axes, legend, and title
   labs(
     x = "Distance to Forest Edge (m)",
     y = "Predicted Probability of Species Presence",
@@ -235,13 +264,18 @@ ggplot(mod2_pred,
     fill = "Season",
     title = "Predicted Species Presence by Distance and Season"
   ) +
+  
+  #Apply minimal theme
   theme_minimal() +
   theme(
-    panel.grid = element_blank(),  
-    legend.position = "top"
+    panel.grid = element_blank(),    #Remove grid lines
+    legend.position = "top"          #Move legend to top
   ) +
+  
+  #Manually set colors for each season
   scale_color_manual(values = c("steelblue", "darkgreen", "pink")) +
   scale_fill_manual(values = c("steelblue", "darkgreen", "pink"))
+
 
 
 ```
@@ -258,8 +292,8 @@ Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its c
 ## j. Calculate model predictions
 
 ```{r}
-pred <- ggpredict(model2, terms = c("edge.distance [0,900]", "season"))
-print(pred)
+pred <- ggpredict(model2, terms = c("edge.distance [0,900]", "season")) #generates predicted values
+print(pred) #displays predicted values
 ```
 
 ## k. Interpret your results
