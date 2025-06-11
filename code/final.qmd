@@ -223,6 +223,8 @@ ggplot(mod2_pred,
            y = predicted, 
            color = group)) +
   geom_line(size = 1.2) +
+  geom_point(size=3,
+             alpha=0.4)+
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.3, color = NA) +
   labs(
     x = "Distance to Forest Edge (m)",
@@ -236,8 +238,8 @@ ggplot(mod2_pred,
     panel.grid = element_blank(),  
     legend.position = "top"
   ) +
-  scale_color_manual(values = c("steelblue", "darkgreen")) +
-  scale_fill_manual(values = c("steelblue", "darkgreen"))
+  scale_color_manual(values = c("steelblue", "darkgreen", "pink")) +
+  scale_fill_manual(values = c("steelblue", "darkgreen", "pink"))
 
 
 ```
