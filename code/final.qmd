@@ -255,22 +255,28 @@ This figure displays modeled probabilities of Swift Parrot occupancy in nest box
 Data citation:
 Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird [Dataset]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb
 
-## j.
+## j. Calculate model predictions
 
 ```{r}
 pred <- ggpredict(model2, terms = c("edge.distance [0,900]", "season"))
 print(pred)
 ```
 
-## k.
+## k. Interpret your results
 
-
+The predicted probability of Swift Parrot nest box occupancy is higher at the forest edge (0 m) than farther away (900 m) in both seasons. 2016 has an occupancy probability of 0.48 at the edge and 0.12 at 900m while 2019 has an occupancy probablity of 0.30 at 0m and 0.06 at 900m. We can also see this correlation in the figure in part h, showing a negative relationship between distance from the forest edge and the likelihood of nest box occupancy. This pattern shows the species preferences for nesting sites closer to forest edges and that they use them less over the years because other species use them year-round while they migrate. 
 
 # Problem 4: Affective and exploratory visualizations
 
-## a.
+## a. Comparing visualizations 
 
+Compare and contrast your affective visualization from Homework 3 and the exploratory visualizations you made for Homework 2. In 1-3 sentences each, explain:
 
-## b. 
+How are the visualizations different from each other in the way you have represented your data?
+What similarities do you see between all your visualizations?
+What patterns (e.g. differences in means/counts/proportions/medians, trends through time, relationships between variables) do you see in each visualization? Are these different between visualizations? If so, why? If not, why not?
+What kinds of feedback did you get during week 9 in workshop or from the instructors? How did you implement or try those suggestions? If you tried and kept those suggestions, explain how and why; if not, explain why not.
+
+## b. Sharing your affective visualization
 
 Done in class. 
