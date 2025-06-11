@@ -223,8 +223,10 @@ ggplot(mod2_pred,
            y = predicted, 
            color = group)) +
   geom_line(size = 1.2) +
-  geom_point(size=3,
-             alpha=0.4)+
+  geom_jitter(data = nest_boxes,
+              aes(x = edge.distance, y = sp, color = factor(season)),
+              width = 20, height = 0.05, alpha = 0.5,
+              inherit.aes = FALSE) +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high, fill = group), alpha = 0.3, color = NA) +
   labs(
     x = "Distance to Forest Edge (m)",
@@ -255,9 +257,13 @@ Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its c
 
 ## j.
 
-
+```{r}
+pred <- ggpredict(model2, terms = c("edge.distance [0,900]", "season"))
+print(pred)
+```
 
 ## k.
+
 
 
 # Problem 4: Affective and exploratory visualizations
@@ -266,3 +272,5 @@ Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its c
 
 
 ## b. 
+
+Done in class. 
